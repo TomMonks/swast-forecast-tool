@@ -61,7 +61,7 @@ class ProphetARIMAEnsemble():
     the most important holiday/special event was found to be new years day.
     
     '''
-    def __init__(self, order, seasonal_order, prophet_default_alpha=0.2):
+    def __init__(self, order, seasonal_order, prophet_default_alpha=0.05):
         '''
         Initialise the ensemble
         
@@ -77,17 +77,25 @@ class ProphetARIMAEnsemble():
         new_years_days: bool, optional (default=True)
             Switch new_years_day prediction on and off
             
+            
+        prophet_default_alpha: float, optional (default=0.05)
+            Prophet requires an interval_width parameter (1-alpha) on initialisation
+           
         '''
         self.order = order
         self.seasonal_order = seasonal_order
         
+        #by default the ensemble has new years day as a holiday
         self.holidays = new_years_day_holidays()
         
-        #needed because Prophet 
+        #needed because Prophet constructor
         self.alpha = prophet_default_alpha
+        
+        #variable representing models in ensemble
         self.arima_model = None
         self.prophet_model = None
         
+        #model not yet fitted
         self._fitted = False
     
     def __str__(self):

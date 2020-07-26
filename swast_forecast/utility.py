@@ -78,7 +78,7 @@ def default_ensemble():
                                 seasonal_order=params['seasonal_order'])
 
 
-def forecast(y_train, horizon, alpha=0.2, return_all_models=False):
+def forecast(y_train, horizon, alpha=0.05, return_all_models=False):
     '''
     Convenience function. All in one forecast function.  
     Create a default ensemble fit the training data and predict ahead.
@@ -91,7 +91,7 @@ def forecast(y_train, horizon, alpha=0.2, return_all_models=False):
     horizon: int
         forecast horizon
         
-    alpha: float, optional (default=0.2)
+    alpha: float, optional (default=0.05)
         100(1-alpha) prediction interval
         
     return_all_models: bool. optional (default=False)
@@ -106,7 +106,7 @@ def forecast(y_train, horizon, alpha=0.2, return_all_models=False):
     return model.predict(horizon, alpha=alpha, return_all_models=return_all_models)
 
 
-def multi_region_forecast(y_train, horizon, alpha=0.2, return_all_models=False):
+def multi_region_forecast(y_train, horizon, alpha=0.05, return_all_models=False):
     '''
     Run forecasts for all regions included in the training data.
     
@@ -121,7 +121,7 @@ def multi_region_forecast(y_train, horizon, alpha=0.2, return_all_models=False):
     horizon: int
         forecast horizon
         
-    alpha: float, optional (default=0.2)
+    alpha: float, optional (default=0.05)
         100(1-alpha) prediction interval
         
     return_all_models: bool. optional (default=False)
