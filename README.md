@@ -37,12 +37,11 @@ In the example below assume that `y_train` is a `pandas.Series` with a `DateTime
 ```python
 from swast_forecast.utility import forecast
 
-#return a 12-step forecast with 95% prediction interval
-results = forecast(y_train, 
-                   horizon=12)
+#return a 7-step forecast with 95% prediction interval
+results = forecast(y_train, horizon=7)
+
 ```
 
-'| ds                  |    yhat |   yhat_lower_95 |   yhat_upper95 |\n|:--------------------|--------:|----------------:|---------------:|\n| 2020-01-01 00:00:00 | 389.034 |         352.986 |        426.056 |\n| 2020-01-02 00:00:00 | 328.488 |         291.369 |        365.122 |\n| 2020-01-03 00:00:00 | 332.563 |         296.344 |        369.358 |\n| 2020-01-04 00:00:00 | 348.734 |         312.404 |        386.402 |\n| 2020-01-05 00:00:00 | 348.858 |         312.056 |        386.331 |\n| 2020-01-06 00:00:00 | 335.639 |         298.304 |        374.322 |\n| 2020-01-07 00:00:00 | 326.683 |         288.587 |        363.517 |\n| 2020-01-08 00:00:00 | 324.272 |         286.408 |        361.524 |\n| 2020-01-09 00:00:00 | 324.575 |         286.336 |        361.742 |\n| 2020-01-10 00:00:00 | 328.924 |         290.05  |        365.805 |\n| 2020-01-11 00:00:00 | 345.399 |         308.329 |        382.77  |\n| 2020-01-12 00:00:00 | 345.872 |         306.701 |        382.754 |'
 
 ## The three step approach
 
@@ -56,10 +55,29 @@ model = default_ensemble()
 #fit the model to the training data
 model.fit(y_train)
 
-#return a 12-step forecast with 95% prediction interval
-model.predict(horizon=12)
+#return a 7-step forecast with 95% prediction interval
+model.predict(horizon=7)
 ```
 
+**Output:**
 
+By default three columns of data are returned in a `pandas.DataFrame`: 
+
+* **yhat**: the mean of the forecast distribution (the point forecast)
+* **yhat_lower_95**: the lower bound of the 95\% prediction interval
+* **yhat_upper_95**: the upper bound of the 95\% prediction interval
+
+The index of the dataframe is a `pandas.DataTimeIndex` 
+
+
+| ds                  |    yhat | yhat_lower_95 | yhat_upper_95 |
+| :------------------ | ------: | ------------: | -----------: |
+| 2020-01-01 00:00:00 | 389.034 |       353.899 |      424.194 |
+| 2020-01-02 00:00:00 | 328.488 |       291.634 |      365.817 |
+| 2020-01-03 00:00:00 | 332.563 |       295.256 |      369.517 |
+| 2020-01-04 00:00:00 | 348.734 |       311.209 |      384.396 |
+| 2020-01-05 00:00:00 | 348.858 |       310.358 |      386.455 |
+| 2020-01-06 00:00:00 | 335.639 |       297.341 |      372.774 |
+| 2020-01-07 00:00:00 | 326.683 |       290.259 |      363.039 |
 
 
