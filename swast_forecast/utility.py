@@ -38,7 +38,8 @@ def pre_process_daily_data(path, observation_col, index_col):
     df.columns = map(str.lower, df.columns)
     df.index.rename(str(df.index.name).lower(), inplace=True)
     
-    clean_table = pd.pivot_table(df, values=observation_col.lower(), index=[index_col.lower()],
+    clean_table = pd.pivot_table(df, values=observation_col.lower(), 
+                                 index=[index_col.lower()],
                                  columns=['ora'], aggfunc=np.sum)
     
     clean_table.index.freq = 'D'
@@ -95,7 +96,8 @@ def forecast(y_train, horizon, alpha=0.05, return_all_models=False):
         100(1-alpha) prediction interval
         
     return_all_models: bool. optional (default=False)
-        Return individual Regression with ARIMA error and Prophet model predictions 
+        Return individual Regression with ARIMA error and Prophet 
+        model predictions 
         
     Returns:
     -------
@@ -103,14 +105,16 @@ def forecast(y_train, horizon, alpha=0.05, return_all_models=False):
     '''
     model = default_ensemble()
     model.fit(y_train)
-    return model.predict(horizon, alpha=alpha, return_all_models=return_all_models)
+    return model.predict(horizon, alpha=alpha, 
+                         return_all_models=return_all_models)
 
 
-def multi_region_forecast(y_train, horizon, alpha=0.05, return_all_models=False):
+def multi_region_forecast(y_train, horizon, alpha=0.05, 
+                          return_all_models=False):
     '''
     Run forecasts for all regions included in the training data.
     
-    This function exploits multiple CPUs.  E.g. If your machine has 4 Cores then
+    This function exploits multiple CPUs. E.g. If your machine has 4 Cores then
     It will run 4 regional forecasts in parrallel.  
     
     Parameters:
@@ -125,7 +129,8 @@ def multi_region_forecast(y_train, horizon, alpha=0.05, return_all_models=False)
         100(1-alpha) prediction interval
         
     return_all_models: bool. optional (default=False)
-        Return individual Regression with ARIMA error and Prophet model predictions 
+        Return individual Regression with ARIMA error and Prophet 
+        model predictions 
         
     Returns:
     -------
@@ -135,5 +140,6 @@ def multi_region_forecast(y_train, horizon, alpha=0.05, return_all_models=False)
 
     '''
     regions = y_train.columns.to_list()
-    results = Parallel(n_jobs=-1)(delayed(forecast)(y_train[region], horizon) for region in regions)
+    results = Parallel(n_jobs=-1)(delayed(forecast)(y_train[region], horizon) 
+                                                    for region in regions)
     return results

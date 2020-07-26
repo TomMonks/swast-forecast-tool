@@ -244,19 +244,20 @@ class ProphetARIMAEnsemble():
             width of prediction intervals
             
         return_all_models: bool, optional (default=False)
-            If true returns ensemble results AND ARIMA and Prophet point forecasts
-            and prediction intervals
+            If true returns ensemble results AND ARIMA and Prophet 
+            point forecasts and prediction intervals
             
         Returns:
         ---------
             pd.DataFrame
             
             Forecasted time series in a data frame with a pd.DataTimeIndex.  
-            Minimum columns are yhat = mean forecast; yhat_lower_{(1-alpha)*100} = lower PI;
+            Minimum columns are yhat = mean forecast; 
+            yhat_lower_{(1-alpha)*100} = lower PI;
             yhat_upper_{(1-alpha)*100} = upper prediction interval.  
             
-            If return_all_models=True then returns an extended DataFrame with columns
-            for ARIMA and Prophet models.
+            If return_all_models=True then returns an extended DataFrame 
+            with columns for ARIMA and Prophet models.
             
         '''
         
@@ -290,8 +291,7 @@ class ProphetARIMAEnsemble():
         
         
     def _arima_predict(self, horizon, alpha=0.05):
-    	'''
-    	
+        '''
     	ARIMA forecast
     	
     	Parameters:
@@ -307,8 +307,9 @@ class ProphetARIMAEnsemble():
         pd.DataFrame
         
         Columns = Mean, Lower_PI, Upper_PI
-    	
-    	'''
+
+        '''
+
         #equivalent to prophet make future dataframe
         pred_idx = pd.date_range(start=self._training_index[-1], 
                                  periods=horizon+1,
