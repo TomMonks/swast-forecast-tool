@@ -6,7 +6,7 @@ A forecasting tool for SWAST. Implemented in Python.
 
 ## Aims: 
 
-The tool predicts the number of calls that result in one or more dispatches of ambulances. 
+The tool predicts the number of calls that result in the dispatch of one or more ambulances. 
 
 ## Methods:
 
