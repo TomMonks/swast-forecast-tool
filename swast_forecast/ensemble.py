@@ -230,7 +230,7 @@ class ProphetARIMAEnsemble():
 
         return prophet_train
     
-    def predict(self, horizon, alpha=0.2, return_all_models=False):
+    def predict(self, horizon, alpha=0.05, return_all_models=False):
         '''
         Produce a point forecast and prediction intervals for a period ahead.
         
@@ -240,7 +240,7 @@ class ProphetARIMAEnsemble():
         horizon: int
             periods to ahead to forecast
             
-        alpha: float, optional (default=0.2)
+        alpha: float, optional (default=0.05)
             width of prediction intervals
             
         return_all_models: bool, optional (default=False)
@@ -289,7 +289,26 @@ class ProphetARIMAEnsemble():
         
         
         
-    def _arima_predict(self, horizon, alpha=0.2):
+    def _arima_predict(self, horizon, alpha=0.05):
+    	'''
+    	
+    	ARIMA forecast
+    	
+    	Parameters:
+    	---------
+    	horizon: int
+            periods to ahead to forecast
+            
+        alpha: float, optional (default=0.05)
+            width of prediction intervals
+            
+        Returns:
+        ---------
+        pd.DataFrame
+        
+        Columns = Mean, Lower_PI, Upper_PI
+    	
+    	'''
         #equivalent to prophet make future dataframe
         pred_idx = pd.date_range(start=self._training_index[-1], 
                                  periods=horizon+1,
@@ -310,7 +329,25 @@ class ProphetARIMAEnsemble():
 
         
     def _prophet_predict(self, horizon, alpha):
+        '''
+    	
+    	Prophet forecast
+    	
+    	Parameters:
+    	---------
+    	horizon: int
+            periods to ahead to forecast
+            
+        alpha: float
+            width of prediction intervals
+            
+        Returns:
+        ---------
+        pd.DataFrame
         
+        Columns = Mean, Lower_PI, Upper_PI
+    	
+    	'''
         #Prophet needs to be refitted if alpha is different from default
         if alpha != self.alpha:
             self._fit_prophet(self._y_train, alpha)
