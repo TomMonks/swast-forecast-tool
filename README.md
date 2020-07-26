@@ -37,7 +37,7 @@ In the example below assume that `y_train` is a `pandas.Series` with a `DateTime
 ```python
 from swast_forecast.utility import forecast
 
-#return a 12-step forecast with 80% prediction interval
+#return a 12-step forecast with 95% prediction interval
 results = forecast(y_train, 
                    horizon=12)
 ```
@@ -48,8 +48,13 @@ results = forecast(y_train,
 
 from swast_forecast.utility import default_ensemble()
 
+#create an ensemble with default parameters
 model = default_ensemble()
+
+#fit the model to the training data
 model.fit(y_train)
+
+#return a 12-step forecast with 95% prediction interval
 model.predict(horizon=12)
 ```
 
