@@ -73,13 +73,10 @@ class ProphetARIMAEnsemble():
         seasonal_order: tuple 
             SARIMA(P, D, Q, s) seasonal equivalent of ARIMA order. s is for the 
             seasonal period.  e.g. 7 for daily data.
-            
-        new_years_days: bool, optional (default=True)
-            Switch new_years_day prediction on and off
-            
-            
+                       
         prophet_default_alpha: float, optional (default=0.05)
-            Prophet requires an interval_width parameter (1-alpha) on initialisation
+            Prophet requires an interval_width parameter (1-alpha) on 
+            initialisation
            
         '''
         self.order = order
