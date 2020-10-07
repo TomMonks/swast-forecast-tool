@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "/home/tom/anaconda3/envs/swast_forecast/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
+}
