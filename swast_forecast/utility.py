@@ -13,25 +13,6 @@ from joblib import Parallel, delayed
 from swast_forecast.ensemble import ProphetARIMAEnsemble
 
 
-def built_in_synthetic_data():
-    '''
-    Returns a dataframe containing synthetic data
-    for two time series.  Range: 2019-01-01 to 2019-12-31
-
-    Returns:
-    -------
-    pd.DataFrame
-    index = DateTimeIndex.
-
-    '''
-    df = pd.read_csv('swast_forecast/synthetic_data/synthetic_responses.csv',
-                     parse_dates=True, index_col='actual_dt')
-
-    df.index.freq = 'D'
-
-    return df
-
-
 def pre_process_daily_data(path, observation_col, index_col):
     '''
     Assumes daily data is stored in long format.  Read in 
@@ -82,15 +63,16 @@ def get_best_arima_parameters():
         dict
     
     '''
-    params = {'order': (1, 1, 3),
-              'seasonal_order': (1, 0, 1, 7)}
+    params = {'order':(1,1,3),
+              'seasonal_order':(1,0,1,7)  
+    }
     return params
 
 
 def default_ensemble():
     '''
     Convenience function to create a ProphetARIMAEnsemble
-    using default best known parameters.
+    using default best known parameters.  
     '''
     params = get_best_arima_parameters()
     return ProphetARIMAEnsemble(order=params['order'], 
@@ -99,7 +81,7 @@ def default_ensemble():
 
 def forecast(y_train, horizon, alpha=0.05, return_all_models=False):
     '''
-    Convenience function. All in one forecast function.
+    Convenience function. All in one forecast function.  
     Create a default ensemble fit the training data and predict ahead.
     
     Parameters:
@@ -158,8 +140,6 @@ def multi_region_forecast(y_train, horizon, alpha=0.05,
 
     '''
     regions = y_train.columns.to_list()
-    results = Parallel(n_jobs=-1)(delayed(forecast)(y_train[region], horizon,
-                                                    alpha=alpha, 
-                                                    return_all_models=return_all_models) 
+    results = Parallel(n_jobs=-1)(delayed(forecast)(y_train[region], horizon) 
                                                     for region in regions)
     return results
