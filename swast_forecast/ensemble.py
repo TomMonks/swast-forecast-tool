@@ -5,11 +5,13 @@ dispatching one or more ambulances
 
 '''
 
-
+import io
+import sys
 import numpy as np
 import pandas as pd
 from fbprophet import Prophet
 from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 
 class NotFittedError(ValueError, AttributeError):
@@ -60,7 +62,8 @@ class ProphetARIMAEnsemble():
 
     '''
 
-    def __init__(self, order, seasonal_order, prophet_default_alpha=0.05):
+    def __init__(self, order, seasonal_order, prophet_default_alpha=0.05,
+                 **arima_kwargs):
         '''
         Initialise the ensemble
 
@@ -77,6 +80,9 @@ class ProphetARIMAEnsemble():
             Prophet requires an interval_width parameter (1-alpha) on 
             initialisation
 
+        **arima_kwargs: dict
+            Dictionary of arima kw arguments
+
         '''
         self.order = order
         self.seasonal_order = seasonal_order
@@ -86,6 +92,9 @@ class ProphetARIMAEnsemble():
 
         # needed because Prophet constructor
         self.alpha = prophet_default_alpha
+
+        #keyword arguments for fitting of the arima model.
+        self.arima_kwargs = arima_kwargs
 
         # variable representing models in ensemble
         self.arima_model = None
@@ -151,8 +160,49 @@ class ProphetARIMAEnsemble():
                                  seasonal_order=self.seasonal_order,
                                  enforce_stationarity=False)
 
+
+        #temp
+        self.arima_model = SARIMAX(endog=y_train,
+                                   exog=arima_holidays,
+                                   order=self.order,
+                                   seasonal_order=self.seasonal_order,
+                                   enforce_stationarity=False, 
+                                   enforce_invertibility=False)
+
         # fit the ARIMA model...
-        self._arima_fitted = self.arima_model.fit()
+
+        # redirect stdout
+        arima_fit_log = io.StringIO()
+        #sys.stdout = arima_fit_log
+
+        #keyword arguments
+        if 'method' in self.arima_kwargs:
+            method =  self.arima_kwargs['method']
+        else:
+            method = 'lbfgs'
+        
+        if 'maxiter' in self.arima_kwargs:
+            maxiter = self.arima_kwargs['maxiter']
+        else:
+            maxiter = 500
+
+        # fit the ARIMA model
+        
+        if self._fitted:
+            #using existing parameter estimates as starting point for opt
+            params = self._arima_fitted.params
+            self._arima_fitted = self.arima_model.fit(method=method, 
+                                                      maxiter=maxiter,
+                                                      start_params=params)
+        else:
+            self._arima_fitted = self.arima_model.fit(method=method, 
+                                                      maxiter=maxiter)
+
+        # now restore stdout function
+        #sys.stdout = sys.__stdout__
+
+        #self.arima_fit_log = arima_fit_log
+        
 
     def _fit_prophet(self, y_train, alpha):
         '''
@@ -224,7 +274,8 @@ class ProphetARIMAEnsemble():
 
         return prophet_train
 
-    def predict(self, horizon, alpha=0.05, return_all_models=False):
+    def predict(self, horizon, alpha=0.05, return_pred_int=False,
+                return_all_models=False):
         '''
         Produce a point forecast and prediction intervals for a period ahead.
 
@@ -282,8 +333,11 @@ class ProphetARIMAEnsemble():
 
         if return_all_models:
             return summary_frame[sorted_columns]
-        else:
+        elif return_pred_int:
             return summary_frame[sorted_columns[:3]]
+        else:
+            return summary_frame[sorted_columns[:1]]
+            
 
     def _arima_predict(self, horizon, alpha=0.05):
         '''
