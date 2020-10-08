@@ -16,3 +16,4 @@ dependencies:
     - pmdarima==1.6.1
     - sklearn==0.0
     - fbprophet==0.6
+    - forecast-tools==0.1.5
