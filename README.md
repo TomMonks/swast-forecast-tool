@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TomMonks/swast-forecast-tool/master)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TomMonks/swast-forecast-tool/master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4277723.svg)](https://doi.org/10.5281/zenodo.4277723) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360+/)
 
 # SWAST Ensemble Forecast Tool
 
