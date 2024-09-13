@@ -9,7 +9,7 @@ import io
 import sys
 import numpy as np
 import pandas as pd
-from fbprophet import Prophet
+from prophet import Prophet
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
